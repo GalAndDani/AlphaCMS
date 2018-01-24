@@ -1,69 +1,89 @@
-@extends('layouts.app')
-
+@extends('layouts.guest')
+@include('templates.guest.footer')
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Login</div>
+<!-- Page container -->
+<div class="page-container">
 
-                <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('login') }}">
-                        {{ csrf_field() }}
+<!-- Page content -->
+<div class="page-content">
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+    <!-- Main content -->
+    <div class="content-wrapper">
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+        <!-- Content area -->
+        <div class="content">
 
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
+            <!-- Simple login form -->
+            <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                {{ csrf_field() }}
+                <div class="panel panel-body login-form">
+                    <div class="text-center">
+                        <div class="icon-object border-slate-300 text-slate-300"><i class="icon-reading"></i></div>
+                        <h5 class="content-group">הכנס למשתמש שלך <small class="display-block">הכנס את פרטייך למטה</small></h5>
+                    </div>
+
+                    <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} has-feedback has-feedback-left">
+                        <input id="email" type="email" class="form-control" placeholder="אימייל" name="email" value="{{ old('email') }}" required autofocus>
+                        <div class="form-control-feedback">
+                            <i class="icon-user text-muted"></i>
+                        </div>
+                        @if ($errors->has('email'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('email') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                    
+
+                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }} has-feedback has-feedback-left">
+                        <input id="password" type="password" class="form-control" name="password" placeholder="סיסמא" required>
+                        <div class="form-control-feedback">
+                            <i class="icon-lock2 text-muted"></i>
                         </div>
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
+                        @if ($errors->has('password'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('password') }}</strong>
+                            </span>
+                        @endif
+                    </div>
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
+                    <div class="form-group login-options">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="checkbox-inline">
+                                    <div class="checker"><span class="checked"><input type="checkbox" class="styled" checked="checked" name="remember" {{ old('remember') ? 'checked' : '' }}></span></div>
+                                    זכור אותי
+                                </label>
+                            </div>
 
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
+                            <div class="col-sm-6 text-right" id="forgot-password-holder">
+                                <a href="{{ route('password.request') }}">שכחתי סיסמא</a>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-8 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Login
-                                </button>
-
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    Forgot Your Password?
-                                </a>
-                            </div>
-                        </div>
-                    </form>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">כניסה <i class="icon-circle-left2 position-right"></i></button>
+                    </div>
                 </div>
-            </div>
+            </form>
+            <!-- /simple login form -->
+
+
+            <!-- Footer -->
+            @yield('footer')
+            <!-- /footer -->
+
         </div>
+        <!-- /content area -->
+
     </div>
+    <!-- /main content -->
+
 </div>
+<!-- /page content -->
+
+</div>
+<!-- /page container -->
 @endsection
