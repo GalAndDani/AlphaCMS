@@ -6724,7 +6724,7 @@ a.list-group-item-danger:hover {
 }
 
 .panel.has-bg-image {
-    background-image: url(../images/backgrounds/panel_bg.png)
+    background-image: url(./images/backgrounds/panel_bg.png)
 }
 
 .panel-flat>.panel-heading+.table,

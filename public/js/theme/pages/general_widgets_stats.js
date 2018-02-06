@@ -1,13 +1,13 @@
 /* ------------------------------------------------------------------------------
-*
-*  # Statistics widgets
-*
-*  Specific JS code additions for general_widgets_stats.html page
-*
-*  Version: 1.0
-*  Latest update: Mar 20, 2017
-*
-* ---------------------------------------------------------------------------- */
+ *
+ *  # Statistics widgets
+ *
+ *  Specific JS code additions for general_widgets_stats.html page
+ *
+ *  Version: 1.0
+ *  Latest update: Mar 20, 2017
+ *
+ * ---------------------------------------------------------------------------- */
 
 $(function() {
 
@@ -16,7 +16,7 @@ $(function() {
     // ------------------------------
 
     // Initialize chart
-    areaChartWidget("#chart_area_basic", 50, '#5C6BC0');
+    //areaChartWidget("#chart_area_basic", 50, '#5C6BC0');
     areaChartWidget("#chart_area_color", 50, 'rgba(255,255,255,0.75)');
 
     // Chart setup
@@ -27,10 +27,15 @@ $(function() {
         // ------------------------------
 
         // Define main variables
-        var d3Container = d3.select(element),
-            margin = {top: 0, right: 0, bottom: 0, left: 0},
-            width = d3Container.node().getBoundingClientRect().width - margin.left - margin.right,
-            height = chartHeight - margin.top - margin.bottom;
+        var d3Container = d3.select(element);
+        var margin = {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+        };
+        var width = d3Container.node().getBoundingClientRect().width - margin.left - margin.right;
+        var height = chartHeight - margin.top - margin.bottom;
 
         // Date and time format
         var parseDate = d3.time.format('%Y-%m-%d').parse;
@@ -47,7 +52,7 @@ $(function() {
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
             .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
         // Construct chart layout
@@ -55,9 +60,13 @@ $(function() {
 
         // Area
         var area = d3.svg.area()
-            .x(function(d) { return x(d.date); })
+            .x(function(d) {
+                return x(d.date);
+            })
             .y0(height)
-            .y1(function(d) { return y(d.value); })
+            .y1(function(d) {
+                return y(d.value);
+            })
             .interpolate('monotone');
 
 
@@ -65,7 +74,7 @@ $(function() {
         // ------------------------------
 
         // Horizontal
-        var x = d3.time.scale().range([0, width ]);
+        var x = d3.time.scale().range([0, width]);
 
         // Vertical
         var y = d3.scale.linear().range([height, 0]);
@@ -74,19 +83,21 @@ $(function() {
         // Load data
         // ------------------------------
 
-        d3.json("assets/demo_data/dashboard/monthly_sales.json", function (error, data) {
+        d3.json("demo_data/dashboard/monthly_sales.json", function(error, data) {
 
             // Show what's wrong if error
             if (error) return console.error(error);
 
             // Pull out values
-            data.forEach(function (d) {
+            data.forEach(function(d) {
                 d.date = parseDate(d.date);
                 d.value = +d.value;
             });
 
             // Get the maximum value in the given array
-            var maxY = d3.max(data, function(d) { return d.value; });
+            var maxY = d3.max(data, function(d) {
+                return d.value;
+            });
 
             // Reset start data for animation
             var startData = data.map(function(datum) {
@@ -101,10 +112,14 @@ $(function() {
             // ------------------------------
 
             // Horizontal
-            x.domain(d3.extent(data, function(d, i) { return d.date; }));
+            x.domain(d3.extent(data, function(d, i) {
+                return d.date;
+            }));
 
             // Vertical
-            y.domain([0, d3.max( data, function(d) { return d.value; })]);
+            y.domain([0, d3.max(data, function(d) {
+                return d.value;
+            })]);
 
 
 
@@ -119,13 +134,13 @@ $(function() {
                 .style('fill', color)
                 .attr("d", area)
                 .transition() // begin animation
-                    .duration(1000)
-                    .attrTween('d', function() {
-                        var interpolator = d3.interpolateArray(startData, data);
-                        return function (t) {
-                            return area(interpolator (t));
-                        };
-                    });
+                .duration(1000)
+                .attrTween('d', function() {
+                    var interpolator = d3.interpolateArray(startData, data);
+                    return function(t) {
+                        return area(interpolator(t));
+                    };
+                });
 
 
             // Resize chart
@@ -165,7 +180,7 @@ $(function() {
                 // -------------------------
 
                 // Area path
-                svg.selectAll('.d3-area').datum( data ).attr("d", area);
+                svg.selectAll('.d3-area').datum(data).attr("d", area);
             }
         });
     }
@@ -176,7 +191,7 @@ $(function() {
     // ------------------------------
 
     // Initialize charts
-    barChartWidget("#chart_bar_basic", 24, 50, true, "elastic", 1200, 50, "#EF5350", "members");
+    // barChartWidget("#chart_bar_basic", 24, 50, true, "elastic", 1200, 50, "#EF5350", "members");
     barChartWidget("#chart_bar_color", 24, 50, true, "elastic", 1200, 50, "rgba(255,255,255,0.75)", "members");
 
     // Chart setup
@@ -188,14 +203,14 @@ $(function() {
 
         // Add data set
         var bardata = [];
-        for (var i=0; i < barQty; i++) {
+        for (var i = 0; i < barQty; i++) {
             bardata.push(Math.round(Math.random() * 10) + 10);
         }
 
         // Main variables
         var d3Container = d3.select(element),
             width = d3Container.node().getBoundingClientRect().width;
-        
+
 
 
         // Construct scales
@@ -245,12 +260,12 @@ $(function() {
             .data(bardata)
             .enter()
             .append('rect')
-                .attr('class', 'd3-random-bars')
-                .attr('width', x.rangeBand())
-                .attr('x', function(d,i) {
-                    return x(i);
-                })
-                .style('fill', color);
+            .attr('class', 'd3-random-bars')
+            .attr('width', x.rangeBand())
+            .attr('x', function(d, i) {
+                return x(i);
+            })
+            .style('fill', color);
 
 
 
@@ -263,41 +278,41 @@ $(function() {
             .offset([-10, 0]);
 
         // Show and hide
-        if(tooltip == "hours" || tooltip == "goal" || tooltip == "members") {
+        if (tooltip == "hours" || tooltip == "goal" || tooltip == "members") {
             bars.call(tip)
                 .on('mouseover', tip.show)
                 .on('mouseout', tip.hide);
         }
 
         // Daily meetings tooltip content
-        if(tooltip == "hours") {
-            tip.html(function (d, i) {
+        if (tooltip == "hours") {
+            tip.html(function(d, i) {
                 return "<div class='text-center'>" +
-                        "<h6 class='no-margin'>" + d + "</h6>" +
-                        "<span class='text-size-small'>meetings</span>" +
-                        "<div class='text-size-small'>" + i + ":00" + "</div>" +
+                    "<h6 class='no-margin'>" + d + "</h6>" +
+                    "<span class='text-size-small'>meetings</span>" +
+                    "<div class='text-size-small'>" + i + ":00" + "</div>" +
                     "</div>";
             });
         }
 
         // Statements tooltip content
-        if(tooltip == "goal") {
-            tip.html(function (d, i) {
+        if (tooltip == "goal") {
+            tip.html(function(d, i) {
                 return "<div class='text-center'>" +
-                        "<h6 class='no-margin'>" + d + "</h6>" +
-                        "<span class='text-size-small'>statements</span>" +
-                        "<div class='text-size-small'>" + i + ":00" + "</div>" +
+                    "<h6 class='no-margin'>" + d + "</h6>" +
+                    "<span class='text-size-small'>statements</span>" +
+                    "<div class='text-size-small'>" + i + ":00" + "</div>" +
                     "</div>";
             });
         }
 
         // Online members tooltip content
-        if(tooltip == "members") {
-            tip.html(function (d, i) {
+        if (tooltip == "members") {
+            tip.html(function(d, i) {
                 return "<div class='text-center'>" +
-                        "<h6 class='no-margin'>" + d + "0" + "</h6>" +
-                        "<span class='text-size-small'>members</span>" +
-                        "<div class='text-size-small'>" + i + ":00" + "</div>" +
+                    "<h6 class='no-margin'>" + d + "0" + "</h6>" +
+                    "<span class='text-size-small'>members</span>" +
+                    "<div class='text-size-small'>" + i + ":00" + "</div>" +
                     "</div>";
             });
         }
@@ -308,7 +323,7 @@ $(function() {
         // ------------------------------
 
         // Choose between animated or static
-        if(animate) {
+        if (animate) {
             withAnimation();
         } else {
             withoutAnimation();
@@ -320,17 +335,17 @@ $(function() {
                 .attr('height', 0)
                 .attr('y', height)
                 .transition()
-                    .attr('height', function(d) {
-                        return y(d);
-                    })
-                    .attr('y', function(d) {
-                        return height - y(d);
-                    })
-                    .delay(function(d, i) {
-                        return i * delay;
-                    })
-                    .duration(duration)
-                    .ease(easing);
+                .attr('height', function(d) {
+                    return y(d);
+                })
+                .attr('y', function(d) {
+                    return height - y(d);
+                })
+                .delay(function(d, i) {
+                    return i * delay;
+                })
+                .duration(duration)
+                .ease(easing);
         }
 
         // Load without animateion
@@ -385,7 +400,7 @@ $(function() {
             // Bars
             svg.selectAll('.d3-random-bars')
                 .attr('width', x.rangeBand())
-                .attr('x', function(d,i) {
+                .attr('x', function(d, i) {
                     return x(i);
                 });
         }
@@ -397,7 +412,7 @@ $(function() {
     // ------------------------------
 
     // Initialize chart
-    lineChartWidget('#line_chart_simple', 50, '#2196F3', 'rgba(33,150,243,0.5)', '#2196F3', '#fff');
+    // lineChartWidget('#line_chart_simple', 50, '#2196F3', 'rgba(33,150,243,0.5)', '#2196F3', '#fff');
     lineChartWidget('#line_chart_color', 50, '#fff', 'rgba(255,255,255,0.5)', '#fff', '#29B6F6');
 
     // Chart setup
@@ -408,34 +423,37 @@ $(function() {
         // ------------------------------
 
         // Add data set
-        var dataset = [
-            {
-                "date": "04/13/14",
-                "alpha": "60"
-            }, {
-                "date": "04/14/14",
-                "alpha": "35"
-            }, {
-                "date": "04/15/14",
-                "alpha": "65"
-            }, {
-                "date": "04/16/14",
-                "alpha": "50"
-            }, {
-                "date": "04/17/14",
-                "alpha": "65"
-            }, {
-                "date": "04/18/14",
-                "alpha": "20"
-            }, {
-                "date": "04/19/14",
-                "alpha": "60"
-            }
-        ];
+        var dataset = [{
+            "date": "04/13/14",
+            "alpha": "60"
+        }, {
+            "date": "04/14/14",
+            "alpha": "35"
+        }, {
+            "date": "04/15/14",
+            "alpha": "65"
+        }, {
+            "date": "04/16/14",
+            "alpha": "50"
+        }, {
+            "date": "04/17/14",
+            "alpha": "65"
+        }, {
+            "date": "04/18/14",
+            "alpha": "20"
+        }, {
+            "date": "04/19/14",
+            "alpha": "60"
+        }];
 
         // Main variables
         var d3Container = d3.select(element),
-            margin = {top: 0, right: 0, bottom: 0, left: 0},
+            margin = {
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0
+            },
             width = d3Container.node().getBoundingClientRect().width - margin.left - margin.right,
             height = chartHeight - margin.top - margin.bottom,
             padding = 20;
@@ -450,12 +468,12 @@ $(function() {
 
         var tooltip = d3.tip()
             .attr('class', 'd3-tip')
-            .html(function (d) {
+            .html(function(d) {
                 return "<ul class='list-unstyled mb-5'>" +
                     "<li>" + "<div class='text-size-base mt-5 mb-5'><i class='icon-check2 position-left'></i>" + formatDate(d.date) + "</div>" + "</li>" +
                     "<li>" + "Sales: &nbsp;" + "<span class='text-semibold pull-right'>" + d.alpha + "</span>" + "</li>" +
-                    "<li>" + "Revenue: &nbsp; " + "<span class='text-semibold pull-right'>" + "$" + (d.alpha * 25).toFixed(2) + "</span>" + "</li>" + 
-                "</ul>";
+                    "<li>" + "Revenue: &nbsp; " + "<span class='text-semibold pull-right'>" + "$" + (d.alpha * 25).toFixed(2) + "</span>" + "</li>" +
+                    "</ul>";
             });
 
 
@@ -467,17 +485,17 @@ $(function() {
 
         // Add SVG group
         var svg = container
-                .attr('width', width + margin.left + margin.right)
-                .attr('height', height + margin.top + margin.bottom)
-                .append("g")
-                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-                    .call(tooltip);
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .call(tooltip);
 
 
         // Load data
         // ------------------------------
 
-        dataset.forEach(function (d) {
+        dataset.forEach(function(d) {
             d.date = parseDate(d.date);
             d.alpha = +d.alpha;
         });
@@ -499,12 +517,12 @@ $(function() {
         // ------------------------------
 
         // Horizontal
-        x.domain(d3.extent(dataset, function (d) {
+        x.domain(d3.extent(dataset, function(d) {
             return d.date;
         }));
 
         // Vertical
-        y.domain([0, d3.max(dataset, function (d) {
+        y.domain([0, d3.max(dataset, function(d) {
             return Math.max(d.alpha);
         })]);
 
@@ -542,10 +560,10 @@ $(function() {
 
         // Animate mask
         clipRect
-              .transition()
-                  .duration(1000)
-                  .ease('linear')
-                  .attr("width", width);
+            .transition()
+            .duration(1000)
+            .ease('linear')
+            .attr("width", width);
 
 
         // Line
@@ -563,8 +581,8 @@ $(function() {
         // Animate path
         svg.select('.line-tickets')
             .transition()
-                .duration(1000)
-                .ease('linear');
+            .duration(1000)
+            .ease('linear');
 
 
         // Add vertical guide lines
@@ -579,31 +597,33 @@ $(function() {
         guide
             .enter()
             .append('line')
-                .attr('class', 'd3-line-guides')
-                .attr('x1', function (d, i) {
-                    return x(d.date);
-                })
-                .attr('y1', function (d, i) {
-                    return height;
-                })
-                .attr('x2', function (d, i) {
-                    return x(d.date);
-                })
-                .attr('y2', function (d, i) {
-                    return height;
-                })
-                .style('stroke', pathColor)
-                .style('stroke-dasharray', '4,2')
-                .style('shape-rendering', 'crispEdges');
+            .attr('class', 'd3-line-guides')
+            .attr('x1', function(d, i) {
+                return x(d.date);
+            })
+            .attr('y1', function(d, i) {
+                return height;
+            })
+            .attr('x2', function(d, i) {
+                return x(d.date);
+            })
+            .attr('y2', function(d, i) {
+                return height;
+            })
+            .style('stroke', pathColor)
+            .style('stroke-dasharray', '4,2')
+            .style('shape-rendering', 'crispEdges');
 
         // Animate guide lines
         guide
             .transition()
-                .duration(1000)
-                .delay(function(d, i) { return i * 150; })
-                .attr('y2', function (d, i) {
-                    return y(d.alpha);
-                });
+            .duration(1000)
+            .delay(function(d, i) {
+                return i * 150;
+            })
+            .attr('y2', function(d, i) {
+                return y(d.alpha);
+            });
 
 
         // Alpha app points
@@ -615,50 +635,50 @@ $(function() {
             .data(dataset)
             .enter()
             .append('circle')
-                .attr('class', 'd3-line-circle d3-line-circle-medium')
-                .attr("cx", line.x())
-                .attr("cy", line.y())
-                .attr("r", 3)
-                .style({
-                    'stroke': pointerLineColor,
-                    'fill': pointerBgColor
-                });
+            .attr('class', 'd3-line-circle d3-line-circle-medium')
+            .attr("cx", line.x())
+            .attr("cy", line.y())
+            .attr("r", 3)
+            .style({
+                'stroke': pointerLineColor,
+                'fill': pointerBgColor
+            });
 
         // Animate points on page load
         points
             .style('opacity', 0)
             .transition()
-                .duration(250)
-                .ease('linear')
-                .delay(1000)
-                .style('opacity', 1);
+            .duration(250)
+            .ease('linear')
+            .delay(1000)
+            .style('opacity', 1);
 
         // Add user interaction
         points
-            .on("mouseover", function (d) {
+            .on("mouseover", function(d) {
                 tooltip.offset([-10, 0]).show(d);
 
                 // Animate circle radius
                 d3.select(this).transition().duration(250).attr('r', 4);
             })
 
-            // Hide tooltip
-            .on("mouseout", function (d) {
-                tooltip.hide(d);
+        // Hide tooltip
+        .on("mouseout", function(d) {
+            tooltip.hide(d);
 
-                // Animate circle radius
-                d3.select(this).transition().duration(250).attr('r', 3);
-            });
+            // Animate circle radius
+            d3.select(this).transition().duration(250).attr('r', 3);
+        });
 
         // Change tooltip direction of first point
         d3.select(points[0][0])
-            .on("mouseover", function (d) {
+            .on("mouseover", function(d) {
                 tooltip.offset([0, 10]).direction('e').show(d);
 
                 // Animate circle radius
                 d3.select(this).transition().duration(250).attr('r', 4);
             })
-            .on("mouseout", function (d) {
+            .on("mouseout", function(d) {
                 tooltip.direction('n').hide(d);
 
                 // Animate circle radius
@@ -667,13 +687,13 @@ $(function() {
 
         // Change tooltip direction of last point
         d3.select(points[0][points.size() - 1])
-            .on("mouseover", function (d) {
+            .on("mouseover", function(d) {
                 tooltip.offset([0, -10]).direction('w').show(d);
 
                 // Animate circle radius
                 d3.select(this).transition().duration(250).attr('r', 4);
             })
-            .on("mouseout", function (d) {
+            .on("mouseout", function(d) {
                 tooltip.direction('n').hide(d);
 
                 // Animate circle radius
@@ -728,10 +748,10 @@ $(function() {
 
             // Guide lines
             svg.selectAll('.d3-line-guides')
-                .attr('x1', function (d, i) {
+                .attr('x1', function(d, i) {
                     return x(d.date);
                 })
-                .attr('x2', function (d, i) {
+                .attr('x2', function(d, i) {
                     return x(d.date);
                 });
         }
@@ -743,7 +763,7 @@ $(function() {
     // ------------------------------
 
     // Initialize chart
-    sparklinesWidget("#sparklines_basic", "area", 30, 50, "basis", 750, 2000, "#66BB6A");
+    // sparklinesWidget("#sparklines_basic", "area", 30, 50, "basis", 750, 2000, "#66BB6A");
     sparklinesWidget("#sparklines_color", "area", 30, 50, "basis", 750, 2000, "rgba(255,255,255,0.75)");
 
     // Chart setup
@@ -755,14 +775,19 @@ $(function() {
 
         // Define main variables
         var d3Container = d3.select(element),
-            margin = {top: 0, right: 0, bottom: 0, left: 0},
+            margin = {
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0
+            },
             width = d3Container.node().getBoundingClientRect().width - margin.left - margin.right,
             height = chartHeight - margin.top - margin.bottom;
 
 
         // Generate random data (for demo only)
         var data = [];
-        for (var i=0; i < qty; i++) {
+        for (var i = 0; i < qty; i++) {
             data.push(Math.floor(Math.random() * qty) + 5);
         }
 
@@ -785,7 +810,7 @@ $(function() {
 
         // Vertical
         y.domain([0, qty]);
-            
+
 
         // Construct chart layout
         // ------------------------------
@@ -793,18 +818,22 @@ $(function() {
         // Line
         var line = d3.svg.line()
             .interpolate(interpolation)
-            .x(function(d, i) { return x(i); })
-            .y(function(d, i) { return y(d); });
+            .x(function(d, i) {
+                return x(i);
+            })
+            .y(function(d, i) {
+                return y(d);
+            });
 
         // Area
         var area = d3.svg.area()
             .interpolate(interpolation)
-            .x(function(d,i) { 
-                return x(i); 
+            .x(function(d, i) {
+                return x(i);
             })
             .y0(height)
-            .y1(function(d) { 
-                return y(d); 
+            .y1(function(d) {
+                return y(d);
             });
 
 
@@ -819,7 +848,7 @@ $(function() {
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
             .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
         // Add mask for animation
@@ -828,7 +857,9 @@ $(function() {
         // Add clip path
         var clip = svg.append("defs")
             .append("clipPath")
-            .attr('id', function(d, i) { return "load-clip-" + element.substring(1); });
+            .attr('id', function(d, i) {
+                return "load-clip-" + element.substring(1);
+            });
 
         // Add clip shape
         var clips = clip.append("rect")
@@ -839,9 +870,9 @@ $(function() {
         // Animate mask
         clips
             .transition()
-                .duration(1000)
-                .ease('linear')
-                .attr("width", width);
+            .duration(1000)
+            .ease('linear')
+            .attr("width", width);
 
 
         //
@@ -850,16 +881,17 @@ $(function() {
 
         // Main path
         var path = svg.append("g")
-            .attr("clip-path", function(d, i) { return "url(#load-clip-" + element.substring(1) + ")"; })
+            .attr("clip-path", function(d, i) {
+                return "url(#load-clip-" + element.substring(1) + ")";
+            })
             .append("path")
-                .datum(data)
-                .attr("transform", "translate(" + x(0) + ",0)");
+            .datum(data)
+            .attr("transform", "translate(" + x(0) + ",0)");
 
         // Add path based on chart type
-        if(chartType == "area") {
+        if (chartType == "area") {
             path.attr("d", area).attr('class', 'd3-area').style("fill", color); // area
-        }
-        else {
+        } else {
             path.attr("d", line).attr("class", "d3-line d3-line-medium").style('stroke', color); // line
         }
 
@@ -867,8 +899,8 @@ $(function() {
         path
             .style('opacity', 0)
             .transition()
-                .duration(500)
-                .style('opacity', 1);
+            .duration(500)
+            .style('opacity', 1);
 
 
 
@@ -898,15 +930,14 @@ $(function() {
             path
                 .attr("transform", null)
                 .transition()
-                    .duration(duration)
-                    .ease("linear")
-                    .attr("transform", "translate(" + x(0) + ",0)");
+                .duration(duration)
+                .ease("linear")
+                .attr("transform", "translate(" + x(0) + ",0)");
 
             // Update path type
-            if(chartType == "area") {
+            if (chartType == "area") {
                 path.attr("d", area).attr('class', 'd3-area').style("fill", color);
-            }
-            else {
+            } else {
                 path.attr("d", line).attr("class", "d3-line d3-line-medium").style('stroke', color);
             }
         }
@@ -1005,7 +1036,7 @@ $(function() {
             .attr('width', boxSize)
             .attr('height', boxSize)
             .append('g')
-                .attr('transform', 'translate(' + (boxSize / 2) + ',' + (boxSize / 2) + ')');
+            .attr('transform', 'translate(' + (boxSize / 2) + ',' + (boxSize / 2) + ')');
 
 
         // Construct chart layout
@@ -1055,16 +1086,16 @@ $(function() {
 
         // Percentage text value
         var numberText = d3.select('.progress-percentage')
-                .attr('class', 'mt-15 mb-5');
+            .attr('class', 'mt-15 mb-5');
 
         // Icon
         d3.select(element)
             .append("i")
-                .attr("class", iconClass + " counter-icon")
-                .style({
-                    'color': foregroundColor,
-                    'top': ((boxSize - iconSize) / 2) + 'px'
-                });
+            .attr("class", iconClass + " counter-icon")
+            .style({
+                'color': foregroundColor,
+                'top': ((boxSize - iconSize) / 2) + 'px'
+            });
 
 
         // Animation
@@ -1134,7 +1165,7 @@ $(function() {
             .attr('width', boxSize)
             .attr('height', boxSize)
             .append('g')
-                .attr('transform', 'translate(' + radius + ',' + radius + ')');
+            .attr('transform', 'translate(' + radius + ',' + radius + ')');
 
 
         // Construct chart layout
@@ -1166,16 +1197,16 @@ $(function() {
             .attr('class', 'd3-progress-foreground')
             .attr('filter', 'url(#blur)')
             .style({
-            	'fill': foregroundColor,
-            	'stroke': foregroundColor
+                'fill': foregroundColor,
+                'stroke': foregroundColor
             });
 
         // Front path
         var front = svg.append('path')
             .attr('class', 'd3-progress-front')
             .style({
-            	'fill': foregroundColor,
-            	'fill-opacity': 1
+                'fill': foregroundColor,
+                'fill-opacity': 1
             });
 
 
@@ -1185,14 +1216,14 @@ $(function() {
         // Percentage text value
         var numberText = svg
             .append('text')
-                .attr('dx', 0)
-                .attr('dy', (fontSize / 2) - border)
-                .style({
-                    'font-size': fontSize + 'px',
-                    'line-height': 1,
-                    'fill': foregroundColor,
-                    'text-anchor': 'middle'
-                });
+            .attr('dx', 0)
+            .attr('dy', (fontSize / 2) - border)
+            .style({
+                'font-size': fontSize + 'px',
+                'line-height': 1,
+                'fill': foregroundColor,
+                'text-anchor': 'middle'
+            });
 
 
         // Animation
@@ -1223,36 +1254,36 @@ $(function() {
     // ------------------------------
 
     // Initialize chart
-    animatedPie("#pie_basic", 120);
+    // animatedPie("#pie_basic", 120);
 
     // Chart setup
     function animatedPie(element, size) {
 
         // Add data set
-        var data = [
-            {
-                "status": "Pending tickets",
-                "icon": "<i class='status-mark border-blue-300 position-left'></i>",
-                "value": 938,
-                "color": "#29B6F6"
-            }, {
-                "status": "Resolved tickets",
-                "icon": "<i class='status-mark border-success-300 position-left'></i>",
-                "value": 490,
-                "color": "#66BB6A"
-            }, {
-                "status": "Closed tickets",
-                "icon": "<i class='status-mark border-danger-300 position-left'></i>",
-                "value": 789,
-                "color": "#EF5350"
-            }
-        ];
+        var data = [{
+            "status": "Pending tickets",
+            "icon": "<i class='status-mark border-blue-300 position-left'></i>",
+            "value": 938,
+            "color": "#29B6F6"
+        }, {
+            "status": "Resolved tickets",
+            "icon": "<i class='status-mark border-success-300 position-left'></i>",
+            "value": 490,
+            "color": "#66BB6A"
+        }, {
+            "status": "Closed tickets",
+            "icon": "<i class='status-mark border-danger-300 position-left'></i>",
+            "value": 789,
+            "color": "#EF5350"
+        }];
 
         // Main variables
         var d3Container = d3.select(element),
             distance = 2, // reserve 2px space for mouseover arc moving
-            radius = (size/2) - distance,
-            sum = d3.sum(data, function(d) { return d.value; });
+            radius = (size / 2) - distance,
+            sum = d3.sum(data, function(d) {
+                return d.value;
+            });
 
 
         // Tooltip
@@ -1262,12 +1293,12 @@ $(function() {
             .attr('class', 'd3-tip')
             .offset([-10, 0])
             .direction('e')
-            .html(function (d) {
+            .html(function(d) {
                 return "<ul class='list-unstyled mb-5'>" +
                     "<li>" + "<div class='text-size-base mb-5 mt-5'>" + d.data.icon + d.data.status + "</div>" + "</li>" +
                     "<li>" + "Total: &nbsp;" + "<span class='text-semibold pull-right'>" + d.value + "</span>" + "</li>" +
                     "<li>" + "Share: &nbsp;" + "<span class='text-semibold pull-right'>" + (100 / (sum / d.value)).toFixed(2) + "%" + "</span>" + "</li>" +
-                "</ul>";
+                    "</ul>";
             });
 
 
@@ -1276,13 +1307,13 @@ $(function() {
 
         // Add svg element
         var container = d3Container.append("svg").call(tip);
-        
+
         // Add SVG group
         var svg = container
             .attr("width", size)
             .attr("height", size)
             .append("g")
-                .attr("transform", "translate(" + (size / 2) + "," + (size / 2) + ")");  
+            .attr("transform", "translate(" + (size / 2) + "," + (size / 2) + ")");
 
 
         // Construct chart layout
@@ -1293,9 +1324,9 @@ $(function() {
             .sort(null)
             .startAngle(Math.PI)
             .endAngle(3 * Math.PI)
-            .value(function (d) { 
+            .value(function(d) {
                 return d.value;
-            }); 
+            });
 
         // Arc
         var arc = d3.svg.arc()
@@ -1310,49 +1341,49 @@ $(function() {
         var arcGroup = svg.selectAll(".d3-arc")
             .data(pie(data))
             .enter()
-            .append("g") 
-                .attr("class", "d3-arc")
-                .style({
-                    'stroke': '#fff',
-                    'stroke-width': 2,
-                    'cursor': 'pointer'
-                });
-        
+            .append("g")
+            .attr("class", "d3-arc")
+            .style({
+                'stroke': '#fff',
+                'stroke-width': 2,
+                'cursor': 'pointer'
+            });
+
         // Append path
         var arcPath = arcGroup
             .append("path")
-            .style("fill", function (d) {
+            .style("fill", function(d) {
                 return d.data.color;
             });
 
         // Add tooltip
         arcPath
-            .on('mouseover', function (d, i) {
+            .on('mouseover', function(d, i) {
 
                 // Transition on mouseover
                 d3.select(this)
-                .transition()
+                    .transition()
                     .duration(500)
                     .ease('elastic')
-                    .attr('transform', function (d) {
+                    .attr('transform', function(d) {
                         d.midAngle = ((d.endAngle - d.startAngle) / 2) + d.startAngle;
                         var x = Math.sin(d.midAngle) * distance;
                         var y = -Math.cos(d.midAngle) * distance;
                         return 'translate(' + x + ',' + y + ')';
                     });
             })
-            .on("mousemove", function (d) {
-                
+            .on("mousemove", function(d) {
+
                 // Show tooltip on mousemove
                 tip.show(d)
                     .style("top", (d3.event.pageY - 40) + "px")
                     .style("left", (d3.event.pageX + 30) + "px");
             })
-            .on('mouseout', function (d, i) {
+            .on('mouseout', function(d, i) {
 
                 // Mouseout transition
                 d3.select(this)
-                .transition()
+                    .transition()
                     .duration(500)
                     .ease('bounce')
                     .attr('transform', 'translate(0,0)');
@@ -1364,15 +1395,17 @@ $(function() {
         // Animate chart on load
         arcPath
             .transition()
-                .delay(function(d, i) { return i * 500; })
-                .duration(500)
-                .attrTween("d", function(d) {
-                    var interpolate = d3.interpolate(d.startAngle,d.endAngle);
-                    return function(t) {
-                        d.endAngle = interpolate(t);
-                        return arc(d);  
-                    }; 
-                });
+            .delay(function(d, i) {
+                return i * 500;
+            })
+            .duration(500)
+            .attrTween("d", function(d) {
+                var interpolate = d3.interpolate(d.startAngle, d.endAngle);
+                return function(t) {
+                    d.endAngle = interpolate(t);
+                    return arc(d);
+                };
+            });
 
 
         //
@@ -1403,33 +1436,33 @@ $(function() {
     // ------------------------------
 
     // Initialize chart
-    animatedPieWithLegend("#pie_basic_legend", 120);
+    // animatedPieWithLegend("#pie_basic_legend", 120);
 
     // Chart setup
     function animatedPieWithLegend(element, size) {
 
         // Add data set
-        var data = [
-            {
-                "status": "New",
-                "value": 578,
-                "color": "#29B6F6"
-            }, {
-                "status": "Pending",
-                "value": 983,
-                "color": "#66BB6A"
-            }, {
-                "status": "Shipped",
-                "value": 459,
-                "color": "#EF5350"
-            }
-        ];
+        var data = [{
+            "status": "New",
+            "value": 578,
+            "color": "#29B6F6"
+        }, {
+            "status": "Pending",
+            "value": 983,
+            "color": "#66BB6A"
+        }, {
+            "status": "Shipped",
+            "value": 459,
+            "color": "#EF5350"
+        }];
 
         // Main variables
         var d3Container = d3.select(element),
             distance = 2, // reserve 2px space for mouseover arc moving
-            radius = (size/2) - distance,
-            sum = d3.sum(data, function(d) { return d.value; });
+            radius = (size / 2) - distance,
+            sum = d3.sum(data, function(d) {
+                return d.value;
+            });
 
 
         // Create chart
@@ -1437,13 +1470,13 @@ $(function() {
 
         // Add svg element
         var container = d3Container.append("svg");
-        
+
         // Add SVG group
         var svg = container
             .attr("width", size)
             .attr("height", size)
             .append("g")
-                .attr("transform", "translate(" + (size / 2) + "," + (size / 2) + ")");  
+            .attr("transform", "translate(" + (size / 2) + "," + (size / 2) + ")");
 
 
         // Construct chart layout
@@ -1454,9 +1487,9 @@ $(function() {
             .sort(null)
             .startAngle(Math.PI)
             .endAngle(3 * Math.PI)
-            .value(function (d) { 
+            .value(function(d) {
                 return d.value;
-            }); 
+            });
 
         // Arc
         var arc = d3.svg.arc()
@@ -1471,32 +1504,32 @@ $(function() {
         var arcGroup = svg.selectAll(".d3-arc")
             .data(pie(data))
             .enter()
-            .append("g") 
-                .attr("class", "d3-arc")
-                .style({
-                    'stroke': '#fff',
-                    'stroke-width': 2,
-                    'cursor': 'pointer'
-                });
-        
+            .append("g")
+            .attr("class", "d3-arc")
+            .style({
+                'stroke': '#fff',
+                'stroke-width': 2,
+                'cursor': 'pointer'
+            });
+
         // Append path
         var arcPath = arcGroup
             .append("path")
-            .style("fill", function (d) {
+            .style("fill", function(d) {
                 return d.data.color;
             });
 
 
         // Add interactions
         arcPath
-            .on('mouseover', function (d, i) {
+            .on('mouseover', function(d, i) {
 
                 // Transition on mouseover
                 d3.select(this)
-                .transition()
+                    .transition()
                     .duration(500)
                     .ease('elastic')
-                    .attr('transform', function (d) {
+                    .attr('transform', function(d) {
                         d.midAngle = ((d.endAngle - d.startAngle) / 2) + d.startAngle;
                         var x = Math.sin(d.midAngle) * distance;
                         var y = -Math.cos(d.midAngle) * distance;
@@ -1508,13 +1541,15 @@ $(function() {
                     'opacity': 0.3,
                     'transition': 'all ease-in-out 0.15s'
                 });
-                $(element + ' [data-slice=' + i + ']').css({'opacity': 1});
+                $(element + ' [data-slice=' + i + ']').css({
+                    'opacity': 1
+                });
             })
-            .on('mouseout', function (d, i) {
+            .on('mouseout', function(d, i) {
 
                 // Mouseout transition
                 d3.select(this)
-                .transition()
+                    .transition()
                     .duration(500)
                     .ease('bounce')
                     .attr('transform', 'translate(0,0)');
@@ -1526,15 +1561,17 @@ $(function() {
         // Animate chart on load
         arcPath
             .transition()
-                .delay(function(d, i) { return i * 500; })
-                .duration(500)
-                .attrTween("d", function(d) {
-                    var interpolate = d3.interpolate(d.startAngle,d.endAngle);
-                    return function(t) {
-                        d.endAngle = interpolate(t);
-                        return arc(d);  
-                    }; 
-                });
+            .delay(function(d, i) {
+                return i * 500;
+            })
+            .duration(500)
+            .attrTween("d", function(d) {
+                var interpolate = d3.interpolate(d.startAngle, d.endAngle);
+                return function(t) {
+                    d.endAngle = interpolate(t);
+                    return arc(d);
+                };
+            });
 
 
         //
@@ -1602,30 +1639,30 @@ $(function() {
         // ------------------------------
 
         // Add data set
-        var data = [
-            {
-                "status": "Pending",
-                "icon": "<i class='status-mark border-blue-300 position-left'></i>",
-                "value": 720,
-                "color": "#29B6F6"
-            }, {
-                "status": "Resolved",
-                "icon": "<i class='status-mark border-success-300 position-left'></i>",
-                "value": 990,
-                "color": "#66BB6A"
-            }, {
-                "status": "Closed",
-                "icon": "<i class='status-mark border-danger-300 position-left'></i>",
-                "value": 720,
-                "color": "#EF5350"
-            }
-        ];
+        var data = [{
+            "status": "Pending",
+            "icon": "<i class='status-mark border-blue-300 position-left'></i>",
+            "value": 720,
+            "color": "#29B6F6"
+        }, {
+            "status": "Resolved",
+            "icon": "<i class='status-mark border-success-300 position-left'></i>",
+            "value": 990,
+            "color": "#66BB6A"
+        }, {
+            "status": "Closed",
+            "icon": "<i class='status-mark border-danger-300 position-left'></i>",
+            "value": 720,
+            "color": "#EF5350"
+        }];
 
         // Main variables
         var d3Container = d3.select(element),
             distance = 2, // reserve 2px space for mouseover arc moving
-            radius = (size/2) - distance,
-            sum = d3.sum(data, function(d) { return d.value; });
+            radius = (size / 2) - distance,
+            sum = d3.sum(data, function(d) {
+                return d.value;
+            });
 
 
 
@@ -1636,12 +1673,12 @@ $(function() {
             .attr('class', 'd3-tip')
             .offset([-10, 0])
             .direction('e')
-            .html(function (d) {
+            .html(function(d) {
                 return "<ul class='list-unstyled mb-5'>" +
                     "<li>" + "<div class='text-size-base mb-5 mt-5'>" + d.data.icon + d.data.status + "</div>" + "</li>" +
                     "<li>" + "Total: &nbsp;" + "<span class='text-semibold pull-right'>" + d.value + "</span>" + "</li>" +
                     "<li>" + "Share: &nbsp;" + "<span class='text-semibold pull-right'>" + (100 / (sum / d.value)).toFixed(2) + "%" + "</span>" + "</li>" +
-                "</ul>";
+                    "</ul>";
             });
 
 
@@ -1651,13 +1688,13 @@ $(function() {
 
         // Add svg element
         var container = d3Container.append("svg").call(tip);
-        
+
         // Add SVG group
         var svg = container
             .attr("width", size)
             .attr("height", size / 2)
             .append("g")
-                .attr("transform", "translate(" + (size / 2) + "," + (size / 2) + ")");  
+            .attr("transform", "translate(" + (size / 2) + "," + (size / 2) + ")");
 
 
 
@@ -1669,9 +1706,9 @@ $(function() {
             .sort(null)
             .startAngle(-Math.PI / 2)
             .endAngle(Math.PI / 2)
-            .value(function (d) { 
+            .value(function(d) {
                 return d.value;
-            }); 
+            });
 
         // Arc
         var arc = d3.svg.arc()
@@ -1688,18 +1725,18 @@ $(function() {
         var arcGroup = svg.selectAll(".d3-arc")
             .data(pie(data))
             .enter()
-            .append("g") 
-                .attr("class", "d3-arc")
-                .style({
-                    'stroke': '#fff',
-                    'stroke-width': 2,
-                    'cursor': 'pointer'
-                });
-        
+            .append("g")
+            .attr("class", "d3-arc")
+            .style({
+                'stroke': '#fff',
+                'stroke-width': 2,
+                'cursor': 'pointer'
+            });
+
         // Append path
         var arcPath = arcGroup
             .append("path")
-            .style("fill", function (d) {
+            .style("fill", function(d) {
                 return d.data.color;
             });
 
@@ -1714,10 +1751,10 @@ $(function() {
 
                 // Transition on mouseover
                 d3.select(this)
-                .transition()
+                    .transition()
                     .duration(500)
                     .ease('elastic')
-                    .attr('transform', function (d) {
+                    .attr('transform', function(d) {
                         d.midAngle = ((d.endAngle - d.startAngle) / 2) + d.startAngle;
                         var x = Math.sin(d.midAngle) * distance;
                         var y = -Math.cos(d.midAngle) * distance;
@@ -1728,13 +1765,15 @@ $(function() {
                     'opacity': 0.3,
                     'transition': 'all ease-in-out 0.15s'
                 });
-                $(element + ' [data-slice=' + i + ']').css({'opacity': 1});
+                $(element + ' [data-slice=' + i + ']').css({
+                    'opacity': 1
+                });
             })
             .on('mouseout', function(d, i) {
 
                 // Mouseout transition
                 d3.select(this)
-                .transition()
+                    .transition()
                     .duration(500)
                     .ease('bounce')
                     .attr('transform', 'translate(0,0)');
@@ -1745,17 +1784,17 @@ $(function() {
         // Animate chart on load
         arcPath
             .transition()
-                .delay(function(d, i) {
-                    return i * 500;
-                })
-                .duration(500)
-                .attrTween("d", function(d) {
-                    var interpolate = d3.interpolate(d.startAngle,d.endAngle);
-                    return function(t) {
-                        d.endAngle = interpolate(t);
-                        return arc(d);  
-                    }; 
-                });
+            .delay(function(d, i) {
+                return i * 500;
+            })
+            .duration(500)
+            .attrTween("d", function(d) {
+                var interpolate = d3.interpolate(d.startAngle, d.endAngle);
+                return function(t) {
+                    d.endAngle = interpolate(t);
+                    return arc(d);
+                };
+            });
 
 
         //
@@ -1840,36 +1879,36 @@ $(function() {
     // ------------------------------
 
     // Initialize chart
-    animatedDonut("#donut_basic_stats", 120);
+    // animatedDonut("#donut_basic_stats", 120);
 
     // Chart setup
     function animatedDonut(element, size) {
 
         // Add data set
-        var data = [
-            {
-                "status": "Pending tickets",
-                "icon": "<i class='status-mark border-blue-300 position-left'></i>",
-                "value": 567,
-                "color": "#29B6F6"
-            }, {
-                "status": "Resolved tickets",
-                "icon": "<i class='status-mark border-success-300 position-left'></i>",
-                "value": 234,
-                "color": "#66BB6A"
-            }, {
-                "status": "Closed tickets",
-                "icon": "<i class='status-mark border-danger-300 position-left'></i>",
-                "value": 642,
-                "color": "#EF5350"
-            }
-        ];
+        var data = [{
+            "status": "Pending tickets",
+            "icon": "<i class='status-mark border-blue-300 position-left'></i>",
+            "value": 567,
+            "color": "#29B6F6"
+        }, {
+            "status": "Resolved tickets",
+            "icon": "<i class='status-mark border-success-300 position-left'></i>",
+            "value": 234,
+            "color": "#66BB6A"
+        }, {
+            "status": "Closed tickets",
+            "icon": "<i class='status-mark border-danger-300 position-left'></i>",
+            "value": 642,
+            "color": "#EF5350"
+        }];
 
         // Main variables
         var d3Container = d3.select(element),
             distance = 2, // reserve 2px space for mouseover arc moving
-            radius = (size/2) - distance,
-            sum = d3.sum(data, function(d) { return d.value; });
+            radius = (size / 2) - distance,
+            sum = d3.sum(data, function(d) {
+                return d.value;
+            });
 
 
         // Tooltip
@@ -1879,12 +1918,12 @@ $(function() {
             .attr('class', 'd3-tip')
             .offset([-10, 0])
             .direction('e')
-            .html(function (d) {
+            .html(function(d) {
                 return "<ul class='list-unstyled mb-5'>" +
                     "<li>" + "<div class='text-size-base mb-5 mt-5'>" + d.data.icon + d.data.status + "</div>" + "</li>" +
                     "<li>" + "Total: &nbsp;" + "<span class='text-semibold pull-right'>" + d.value + "</span>" + "</li>" +
                     "<li>" + "Share: &nbsp;" + "<span class='text-semibold pull-right'>" + (100 / (sum / d.value)).toFixed(2) + "%" + "</span>" + "</li>" +
-                "</ul>";
+                    "</ul>";
             });
 
 
@@ -1893,13 +1932,13 @@ $(function() {
 
         // Add svg element
         var container = d3Container.append("svg").call(tip);
-        
+
         // Add SVG group
         var svg = container
             .attr("width", size)
             .attr("height", size)
             .append("g")
-                .attr("transform", "translate(" + (size / 2) + "," + (size / 2) + ")");  
+            .attr("transform", "translate(" + (size / 2) + "," + (size / 2) + ")");
 
 
         // Construct chart layout
@@ -1910,9 +1949,9 @@ $(function() {
             .sort(null)
             .startAngle(Math.PI)
             .endAngle(3 * Math.PI)
-            .value(function (d) { 
+            .value(function(d) {
                 return d.value;
-            }); 
+            });
 
         // Arc
         var arc = d3.svg.arc()
@@ -1928,49 +1967,49 @@ $(function() {
         var arcGroup = svg.selectAll(".d3-arc")
             .data(pie(data))
             .enter()
-            .append("g") 
-                .attr("class", "d3-arc")
-                .style({
-                    'stroke': '#fff',
-                    'stroke-width': 2,
-                    'cursor': 'pointer'
-                });
-        
+            .append("g")
+            .attr("class", "d3-arc")
+            .style({
+                'stroke': '#fff',
+                'stroke-width': 2,
+                'cursor': 'pointer'
+            });
+
         // Append path
         var arcPath = arcGroup
             .append("path")
-            .style("fill", function (d) {
+            .style("fill", function(d) {
                 return d.data.color;
             });
 
         // Add tooltip
         arcPath
-            .on('mouseover', function (d, i) {
+            .on('mouseover', function(d, i) {
 
                 // Transition on mouseover
                 d3.select(this)
-                .transition()
+                    .transition()
                     .duration(500)
                     .ease('elastic')
-                    .attr('transform', function (d) {
+                    .attr('transform', function(d) {
                         d.midAngle = ((d.endAngle - d.startAngle) / 2) + d.startAngle;
                         var x = Math.sin(d.midAngle) * distance;
                         var y = -Math.cos(d.midAngle) * distance;
                         return 'translate(' + x + ',' + y + ')';
                     });
             })
-            .on("mousemove", function (d) {
-                
+            .on("mousemove", function(d) {
+
                 // Show tooltip on mousemove
                 tip.show(d)
                     .style("top", (d3.event.pageY - 40) + "px")
                     .style("left", (d3.event.pageX + 30) + "px");
             })
-            .on('mouseout', function (d, i) {
+            .on('mouseout', function(d, i) {
 
                 // Mouseout transition
                 d3.select(this)
-                .transition()
+                    .transition()
                     .duration(500)
                     .ease('bounce')
                     .attr('transform', 'translate(0,0)');
@@ -1982,15 +2021,17 @@ $(function() {
         // Animate chart on load
         arcPath
             .transition()
-                .delay(function(d, i) { return i * 500; })
-                .duration(500)
-                .attrTween("d", function(d) {
-                    var interpolate = d3.interpolate(d.startAngle,d.endAngle);
-                    return function(t) {
-                        d.endAngle = interpolate(t);
-                        return arc(d);  
-                    }; 
-                });
+            .delay(function(d, i) {
+                return i * 500;
+            })
+            .duration(500)
+            .attrTween("d", function(d) {
+                var interpolate = d3.interpolate(d.startAngle, d.endAngle);
+                return function(t) {
+                    d.endAngle = interpolate(t);
+                    return arc(d);
+                };
+            });
 
 
         //
@@ -2025,33 +2066,33 @@ $(function() {
     // ------------------------------
 
     // Initialize chart
-    animatedDonutWithLegend("#donut_basic_legend", 120);
+    // animatedDonutWithLegend("#donut_basic_legend", 120);
 
     // Chart setup
     function animatedDonutWithLegend(element, size) {
 
         // Add data set
-        var data = [
-            {
-                "status": "New",
-                "value": 790,
-                "color": "#29B6F6"
-            }, {
-                "status": "Pending",
-                "value": 850,
-                "color": "#66BB6A"
-            }, {
-                "status": "Shipped",
-                "value": 760,
-                "color": "#EF5350"
-            }
-        ];
+        var data = [{
+            "status": "New",
+            "value": 790,
+            "color": "#29B6F6"
+        }, {
+            "status": "Pending",
+            "value": 850,
+            "color": "#66BB6A"
+        }, {
+            "status": "Shipped",
+            "value": 760,
+            "color": "#EF5350"
+        }];
 
         // Main variables
         var d3Container = d3.select(element),
             distance = 2, // reserve 2px space for mouseover arc moving
-            radius = (size/2) - distance,
-            sum = d3.sum(data, function(d) { return d.value; });
+            radius = (size / 2) - distance,
+            sum = d3.sum(data, function(d) {
+                return d.value;
+            });
 
 
         // Create chart
@@ -2059,13 +2100,13 @@ $(function() {
 
         // Add svg element
         var container = d3Container.append("svg");
-        
+
         // Add SVG group
         var svg = container
             .attr("width", size)
             .attr("height", size)
             .append("g")
-                .attr("transform", "translate(" + (size / 2) + "," + (size / 2) + ")");  
+            .attr("transform", "translate(" + (size / 2) + "," + (size / 2) + ")");
 
 
         // Construct chart layout
@@ -2076,9 +2117,9 @@ $(function() {
             .sort(null)
             .startAngle(Math.PI)
             .endAngle(3 * Math.PI)
-            .value(function (d) { 
+            .value(function(d) {
                 return d.value;
-            }); 
+            });
 
         // Arc
         var arc = d3.svg.arc()
@@ -2094,32 +2135,32 @@ $(function() {
         var arcGroup = svg.selectAll(".d3-arc")
             .data(pie(data))
             .enter()
-            .append("g") 
-                .attr("class", "d3-arc")
-                .style({
-                    'stroke': '#fff',
-                    'stroke-width': 2,
-                    'cursor': 'pointer'
-                });
-        
+            .append("g")
+            .attr("class", "d3-arc")
+            .style({
+                'stroke': '#fff',
+                'stroke-width': 2,
+                'cursor': 'pointer'
+            });
+
         // Append path
         var arcPath = arcGroup
             .append("path")
-            .style("fill", function (d) {
+            .style("fill", function(d) {
                 return d.data.color;
             });
 
 
         // Add interactions
         arcPath
-            .on('mouseover', function (d, i) {
+            .on('mouseover', function(d, i) {
 
                 // Transition on mouseover
                 d3.select(this)
-                .transition()
+                    .transition()
                     .duration(500)
                     .ease('elastic')
-                    .attr('transform', function (d) {
+                    .attr('transform', function(d) {
                         d.midAngle = ((d.endAngle - d.startAngle) / 2) + d.startAngle;
                         var x = Math.sin(d.midAngle) * distance;
                         var y = -Math.cos(d.midAngle) * distance;
@@ -2131,13 +2172,15 @@ $(function() {
                     'opacity': 0.3,
                     'transition': 'all ease-in-out 0.15s'
                 });
-                $(element + ' [data-slice=' + i + ']').css({'opacity': 1});
+                $(element + ' [data-slice=' + i + ']').css({
+                    'opacity': 1
+                });
             })
-            .on('mouseout', function (d, i) {
+            .on('mouseout', function(d, i) {
 
                 // Mouseout transition
                 d3.select(this)
-                .transition()
+                    .transition()
                     .duration(500)
                     .ease('bounce')
                     .attr('transform', 'translate(0,0)');
@@ -2149,17 +2192,17 @@ $(function() {
         // Animate chart on load
         arcPath
             .transition()
-                .delay(function(d, i) {
-                    return i * 500;
-                })
-                .duration(500)
-                .attrTween("d", function(d) {
-                    var interpolate = d3.interpolate(d.startAngle,d.endAngle);
-                    return function(t) {
-                        d.endAngle = interpolate(t);
-                        return arc(d);  
-                    }; 
-                });
+            .delay(function(d, i) {
+                return i * 500;
+            })
+            .duration(500)
+            .attrTween("d", function(d) {
+                var interpolate = d3.interpolate(d.startAngle, d.endAngle);
+                return function(t) {
+                    d.endAngle = interpolate(t);
+                    return arc(d);
+                };
+            });
 
 
         //
@@ -2221,7 +2264,7 @@ $(function() {
     // ------------------------------
 
     // Initialize chart
-    donutWithDetails("#donut_basic_details", 146);
+    // donutWithDetails("#donut_basic_details", 146);
 
     // Chart setup
     function donutWithDetails(element, size) {
@@ -2231,30 +2274,30 @@ $(function() {
         // ------------------------------
 
         // Add data set
-        var data = [
-            {
-                "status": "Pending",
-                "icon": "<i class='status-mark border-blue-300 position-left'></i>",
-                "value": 720,
-                "color": "#29B6F6"
-            }, {
-                "status": "Resolved",
-                "icon": "<i class='status-mark border-success-300 position-left'></i>",
-                "value": 990,
-                "color": "#66BB6A"
-            }, {
-                "status": "Closed",
-                "icon": "<i class='status-mark border-danger-300 position-left'></i>",
-                "value": 720,
-                "color": "#EF5350"
-            }
-        ];
+        var data = [{
+            "status": "Pending",
+            "icon": "<i class='status-mark border-blue-300 position-left'></i>",
+            "value": 720,
+            "color": "#29B6F6"
+        }, {
+            "status": "Resolved",
+            "icon": "<i class='status-mark border-success-300 position-left'></i>",
+            "value": 990,
+            "color": "#66BB6A"
+        }, {
+            "status": "Closed",
+            "icon": "<i class='status-mark border-danger-300 position-left'></i>",
+            "value": 720,
+            "color": "#EF5350"
+        }];
 
         // Main variables
         var d3Container = d3.select(element),
             distance = 2, // reserve 2px space for mouseover arc moving
-            radius = (size/2) - distance,
-            sum = d3.sum(data, function(d) { return d.value; });
+            radius = (size / 2) - distance,
+            sum = d3.sum(data, function(d) {
+                return d.value;
+            });
 
 
         // Tooltip
@@ -2264,12 +2307,12 @@ $(function() {
             .attr('class', 'd3-tip')
             .offset([-10, 0])
             .direction('e')
-            .html(function (d) {
+            .html(function(d) {
                 return "<ul class='list-unstyled mb-5'>" +
                     "<li>" + "<div class='text-size-base mb-5 mt-5'>" + d.data.icon + d.data.status + "</div>" + "</li>" +
                     "<li>" + "Total: &nbsp;" + "<span class='text-semibold pull-right'>" + d.value + "</span>" + "</li>" +
                     "<li>" + "Share: &nbsp;" + "<span class='text-semibold pull-right'>" + (100 / (sum / d.value)).toFixed(2) + "%" + "</span>" + "</li>" +
-                "</ul>";
+                    "</ul>";
             });
 
 
@@ -2278,13 +2321,13 @@ $(function() {
 
         // Add svg element
         var container = d3Container.append("svg").call(tip);
-        
+
         // Add SVG group
         var svg = container
             .attr("width", size)
             .attr("height", size)
             .append("g")
-                .attr("transform", "translate(" + (size / 2) + "," + (size / 2) + ")");  
+            .attr("transform", "translate(" + (size / 2) + "," + (size / 2) + ")");
 
 
         // Construct chart layout
@@ -2295,9 +2338,9 @@ $(function() {
             .sort(null)
             .startAngle(Math.PI)
             .endAngle(3 * Math.PI)
-            .value(function (d) { 
+            .value(function(d) {
                 return d.value;
-            }); 
+            });
 
         // Arc
         var arc = d3.svg.arc()
@@ -2313,18 +2356,18 @@ $(function() {
         var arcGroup = svg.selectAll(".d3-arc")
             .data(pie(data))
             .enter()
-            .append("g") 
-                .attr("class", "d3-arc")
-                .style({
-                    'stroke': '#fff',
-                    'stroke-width': 2,
-                    'cursor': 'pointer'
-                });
-        
+            .append("g")
+            .attr("class", "d3-arc")
+            .style({
+                'stroke': '#fff',
+                'stroke-width': 2,
+                'cursor': 'pointer'
+            });
+
         // Append path
         var arcPath = arcGroup
             .append("path")
-            .style("fill", function (d) {
+            .style("fill", function(d) {
                 return d.data.color;
             });
 
@@ -2339,10 +2382,10 @@ $(function() {
 
                 // Transition on mouseover
                 d3.select(this)
-                .transition()
+                    .transition()
                     .duration(500)
                     .ease('elastic')
-                    .attr('transform', function (d) {
+                    .attr('transform', function(d) {
                         d.midAngle = ((d.endAngle - d.startAngle) / 2) + d.startAngle;
                         var x = Math.sin(d.midAngle) * distance;
                         var y = -Math.cos(d.midAngle) * distance;
@@ -2353,13 +2396,15 @@ $(function() {
                     'opacity': 0.3,
                     'transition': 'all ease-in-out 0.15s'
                 });
-                $(element + ' [data-slice=' + i + ']').css({'opacity': 1});
+                $(element + ' [data-slice=' + i + ']').css({
+                    'opacity': 1
+                });
             })
             .on('mouseout', function(d, i) {
 
                 // Mouseout transition
                 d3.select(this)
-                .transition()
+                    .transition()
                     .duration(500)
                     .ease('bounce')
                     .attr('transform', 'translate(0,0)');
@@ -2375,11 +2420,11 @@ $(function() {
             })
             .duration(500)
             .attrTween("d", function(d) {
-                var interpolate = d3.interpolate(d.startAngle,d.endAngle);
+                var interpolate = d3.interpolate(d.startAngle, d.endAngle);
                 return function(t) {
                     d.endAngle = interpolate(t);
-                    return arc(d);  
-                }; 
+                    return arc(d);
+                };
             });
 
 
@@ -2478,7 +2523,7 @@ $(function() {
 
         // Add svg element
         var container = d3Container.append("svg");
-        
+
         // Add SVG group
         var svg = container
             .attr('width', radius * 2)
@@ -2645,7 +2690,7 @@ $(function() {
 
         // Add svg element
         var container = d3Container.append("svg");
-        
+
         // Add SVG group
         var svg = container
             .attr('width', radius * 2)
@@ -2796,10 +2841,10 @@ $(function() {
     function roundedProgressSingle(element, size, goal, color) {
 
         // Add random data
-        var dataset = function () {
-            return [
-                {percentage: Math.random() * 100}
-            ];
+        var dataset = function() {
+            return [{
+                percentage: Math.random() * 100
+            }];
         };
 
         // Main variables
@@ -2816,13 +2861,13 @@ $(function() {
 
         // Add svg element
         var container = d3Container.append("svg");
-        
+
         // Add SVG group
         var svg = container
             .attr("width", width)
             .attr("height", height)
             .append("g")
-                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 
         // Construct chart layout
@@ -2831,7 +2876,7 @@ $(function() {
         // Foreground arc
         var arc = d3.svg.arc()
             .startAngle(0)
-            .endAngle(function (d) {
+            .endAngle(function(d) {
                 return d.percentage / 100 * τ;
             })
             .innerRadius((size / 2) - strokeWidth)
@@ -2914,11 +2959,11 @@ $(function() {
         // Animation
         function update() {
             field = field
-                .each(function (d) {
+                .each(function(d) {
                     this._value = d.percentage;
                 })
                 .data(dataset)
-                .each(function (d) {
+                .each(function(d) {
                     d.previousValue = this._value;
                 });
 
@@ -2929,12 +2974,12 @@ $(function() {
                 .duration(600)
                 .ease("easeInOut")
                 .attrTween("d", arcTween);
-                
+
             // Update count text
             field
                 .select(".arc-goal-completed")
-                .text(function (d) {
-                    return Math.round(d.percentage /100 * goal);
+                .text(function(d) {
+                    return Math.round(d.percentage / 100 * goal);
                 });
 
             // Animate count text
@@ -2944,7 +2989,7 @@ $(function() {
                 .tween("text", function(d) {
                     var i = d3.interpolate(this.textContent, d.percentage);
                     return function(t) {
-                        this.textContent = Math.floor(d.percentage/100 * goal);
+                        this.textContent = Math.floor(d.percentage / 100 * goal);
                     };
                 });
 
@@ -2955,7 +3000,7 @@ $(function() {
         // Arc animation
         function arcTween(d) {
             var i = d3.interpolateNumber(d.previousValue, d.percentage);
-            return function (t) {
+            return function(t) {
                 d.percentage = i(t);
                 return arc(d);
             };
@@ -2974,11 +3019,22 @@ $(function() {
     function roundedProgressMultiple(element, size) {
 
         // Add random data
-        var data = [
-                {index: 0, name: 'Memory', percentage: 0},
-                {index: 1, name: 'CPU', percentage: 0},
-                {index: 2, name: 'Sessions', percentage: 0}
-            ];
+        var data = [{
+                index: 0,
+                name: 'Memory',
+                percentage: 0
+            },
+            {
+                index: 1,
+                name: 'CPU',
+                percentage: 0
+            },
+            {
+                index: 2,
+                name: 'Sessions',
+                percentage: 0
+            }
+        ];
 
         // Main variables
         var d3Container = d3.select(element),
@@ -2997,13 +3053,13 @@ $(function() {
 
         // Add svg element
         var container = d3Container.append("svg");
-        
+
         // Add SVG group
         var svg = container
             .attr("width", width)
             .attr("height", height)
             .append("g")
-                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 
         // Construct chart layout
@@ -3012,13 +3068,13 @@ $(function() {
         // Foreground arc
         var arc = d3.svg.arc()
             .startAngle(0)
-            .endAngle(function (d) {
+            .endAngle(function(d) {
                 return d.percentage / 100 * τ;
             })
-            .innerRadius(function (d) {
+            .innerRadius(function(d) {
                 return (size / 2) - d.index * (strokeWidth + padding);
             })
-            .outerRadius(function (d) {
+            .outerRadius(function(d) {
                 return ((size / 2) - d.index * (strokeWidth + padding)) - strokeWidth;
             })
             .cornerRadius(20);
@@ -3027,10 +3083,10 @@ $(function() {
         var background = d3.svg.arc()
             .startAngle(0)
             .endAngle(τ)
-            .innerRadius(function (d) {
+            .innerRadius(function(d) {
                 return (size / 2) - d.index * (strokeWidth + padding);
             })
-            .outerRadius(function (d) {
+            .outerRadius(function(d) {
                 return ((size / 2) - d.index * (strokeWidth + padding)) - strokeWidth;
             });
 
@@ -3051,14 +3107,14 @@ $(function() {
         field
             .append("path")
             .attr("class", "arc-foreground")
-            .style("fill", function (d, i) {
+            .style("fill", function(d, i) {
                 return colors[i];
             });
 
         // Background arcs
         field
             .append("path")
-            .style("fill", function (d, i) {
+            .style("fill", function(d, i) {
                 return colors[i];
             })
             .style("opacity", 0.1)
@@ -3098,11 +3154,11 @@ $(function() {
         // Animation
         function update() {
             field = field
-                .each(function (d) {
+                .each(function(d) {
                     this._value = d.percentage;
                 })
                 .data(data)
-                .each(function (d) {
+                .each(function(d) {
                     d.previousValue = this._value;
                     d.percentage = Math.round(Math.random() * 100) + 1;
                 });
@@ -3114,7 +3170,7 @@ $(function() {
                 .duration(750)
                 .ease("easeInOut")
                 .attrTween("d", arcTween);
-                
+
             // Update every 4 seconds
             setTimeout(update, 4000);
         }
@@ -3122,7 +3178,7 @@ $(function() {
         // Arc animation
         function arcTween(d) {
             var i = d3.interpolateNumber(d.previousValue, d.percentage);
-            return function (t) {
+            return function(t) {
                 d.percentage = i(t);
                 return arc(d);
             };
@@ -3141,11 +3197,19 @@ $(function() {
     function pieWithProgress(element, size) {
 
         // Demo dataset
-        var dataset = [
-                { name: 'New', count: 639 },
-                { name: 'Pending', count: 255 },
-                { name: 'Shipped', count: 215 }
-            ];
+        var dataset = [{
+                name: 'New',
+                count: 639
+            },
+            {
+                name: 'Pending',
+                count: 255
+            },
+            {
+                name: 'Shipped',
+                count: 215
+            }
+        ];
 
         // Main variables
         var d3Container = d3.select(element),
@@ -3168,26 +3232,28 @@ $(function() {
 
         // Add svg element
         var container = d3Container.append("svg");
-        
+
         // Add SVG group
         var svg = container
             .attr("width", width)
             .attr("height", height)
             .append("g")
-                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 
         // Construct chart layout
         // ------------------------------
 
         // Add dataset
-        dataset.forEach(function(d){
-            total+= d.count;
+        dataset.forEach(function(d) {
+            total += d.count;
         });
 
         // Pie layout
         var pie = d3.layout.pie()
-            .value(function(d){ return d.count; })
+            .value(function(d) {
+                return d.count;
+            })
             .sort(null);
 
         // Inner arc
@@ -3209,10 +3275,10 @@ $(function() {
         // Animations
         //
         var arcTween = function(transition, newAngle) {
-            transition.attrTween("d", function (d) {
+            transition.attrTween("d", function(d) {
                 var interpolate = d3.interpolate(d.endAngle, newAngle);
                 var interpolateCount = d3.interpolate(0, dataset[0].count);
-                return function (t) {
+                return function(t) {
                     d.endAngle = interpolate(t);
                     middleCount.text(d3.format(",d")(Math.floor(interpolateCount(t))));
                     return arcLine(d);
@@ -3243,14 +3309,16 @@ $(function() {
         // Animate donut
         path
             .transition()
-            .delay(function(d, i) { return i; })
+            .delay(function(d, i) {
+                return i;
+            })
             .duration(600)
             .attrTween("d", function(d) {
                 var interpolate = d3.interpolate(d.startAngle, d.endAngle);
                 return function(t) {
                     d.endAngle = interpolate(t);
-                    return arc(d);  
-                }; 
+                    return arc(d);
+                };
             });
 
 
@@ -3260,7 +3328,9 @@ $(function() {
 
         // Line
         var pathLine = svg.append('path')
-            .datum({endAngle: 0})
+            .datum({
+                endAngle: 0
+            })
             .attr('d', arcLine)
             .style({
                 fill: color('New')
@@ -3285,9 +3355,9 @@ $(function() {
                 'font-weight': 500,
                 'text-anchor': 'middle'
             })
-            .text(function(d){
+            .text(function(d) {
                 return d;
-            });            
+            });
 
 
         //
@@ -3301,7 +3371,9 @@ $(function() {
                     'opacity': 0.3,
                     'transition': 'all ease-in-out 0.15s'
                 });
-                $(element + ' [data-slice=' + i + ']').css({'opacity': 1});
+                $(element + ' [data-slice=' + i + ']').css({
+                    'opacity': 1
+                });
             })
             .on('mouseout', function(d, i) {
                 $(element + ' [data-slice]').css('opacity', 1);
@@ -3359,13 +3431,13 @@ $(function() {
             pointerWidth = 10,
             pointerTailLength = 5,
             pointerHeadLengthPercent = 0.75,
-            
+
             minValue = min,
             maxValue = max,
-            
+
             minAngle = -90,
             maxAngle = 90,
-            
+
             slices = sliceQty,
             range = maxAngle - minAngle,
             pointerHeadLength = Math.round(radius * pointerHeadLengthPercent);
@@ -3391,7 +3463,7 @@ $(function() {
 
         // Construct chart layout
         // ------------------------------
-        
+
         // Donut  
         var arc = d3.svg.arc()
             .innerRadius(radius - ringWidth - ringInset)
@@ -3409,7 +3481,7 @@ $(function() {
         var scale = d3.scale.linear()
             .range([0, 1])
             .domain([minValue, maxValue]);
-            
+
         // Ticks
         var ticks = scale.ticks(slices);
         var tickData = d3.range(slices)
@@ -3421,7 +3493,7 @@ $(function() {
         function deg2rad(deg) {
             return deg * Math.PI / 180;
         }
-            
+
         // Calculate rotation angle
         function newAngle(d) {
             var ratio = scale(d);
@@ -3480,7 +3552,9 @@ $(function() {
                 'font-size': 11,
                 'fill': '#999'
             })
-            .text(function(d) { return d + "%"; });
+            .text(function(d) {
+                return d + "%";
+            });
 
 
         //
@@ -3489,7 +3563,7 @@ $(function() {
 
         // Line data
         var lineData = [
-            [pointerWidth / 2, 0], 
+            [pointerWidth / 2, 0],
             [0, -pointerHeadLength],
             [-(pointerWidth / 2), 0],
             [0, pointerTailLength],
