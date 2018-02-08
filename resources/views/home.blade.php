@@ -73,6 +73,7 @@
 
     <!-- Dashboard content -->
     <div class="row">
+        
         <!-- OPTION 1-->
         <div class="row">
             <div class="col-sm-6 col-md-3">
@@ -168,6 +169,7 @@
             </div>
         </div>
         <!-- /OPTION 1 -->
+
         <!-- OPTION 2-->
         <div class="row">
             <div class="col-lg-3">
@@ -271,6 +273,7 @@
             </div>
         </div>
         <!-- /OPTION 2 -->
+
         <!-- OPTION 3 -->
         <div class="row">
             <div class="col-md-3">
@@ -364,6 +367,8 @@
 
             </div>
         </div>
+        <!-- /OPTION 3 -->
+
     </div> 
     <!-- /dashboard content -->
 

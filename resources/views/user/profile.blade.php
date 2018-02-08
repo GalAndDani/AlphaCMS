@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@include('templates.app.footer')
 
 @section('js')
 <script type="text/javascript" src="{{ asset('js/theme/core/libraries/jasny_bootstrap.min.js') }}"></script>
@@ -17,40 +18,39 @@
 <div class="page-header page-header-default">
 <div class="page-header-content">
     <div class="page-title">
-        <h4><i class="icon-arrow-right6 position-left"></i> <span class="text-semibold">User Pages</span> - Tabbed Profile</h4>
+        <h4><i class="icon-arrow-right6 position-left"></i> <span class="text-semibold">הפרופיל שלי</span></h4>
     </div>
 
     <div class="heading-elements">
         <div class="heading-btn-group">
-            <a href="#" class="btn btn-link btn-float has-text"><i class="icon-bars-alt text-primary"></i><span>Statistics</span></a>
-            <a href="#" class="btn btn-link btn-float has-text"><i class="icon-calculator text-primary"></i> <span>Invoices</span></a>
-            <a href="#" class="btn btn-link btn-float has-text"><i class="icon-calendar5 text-primary"></i> <span>Schedule</span></a>
+            <a href="#" class="btn btn-link btn-float has-text"><i class="icon-bars-alt text-primary"></i><span>סטטיסטיקה</span></a>
+            <a href="#" class="btn btn-link btn-float has-text"><i class="icon-calculator text-primary"></i> <span>חשבוניות</span></a>
+            <a href="#" class="btn btn-link btn-float has-text"><i class="icon-calendar5 text-primary"></i> <span>לו"ז</span></a>
         </div>
     </div>
 </div>
 
 <div class="breadcrumb-line">
     <ul class="breadcrumb">
-        <li><a href="index.html"><i class="icon-home2 position-left"></i> Home</a></li>
-        <li><a href="user_profile_tabbed.html">User pages</a></li>
-        <li class="active">Tabbed profile</li>
+        <li><a href="{{ route('home') }}"><i class="icon-home2 position-left"></i> דף הבית</a></li>
+        <li class="active"><a href="{{ route('profile') }}"> הפרופיל שלי</a></li>
     </ul>
 
     <ul class="breadcrumb-elements">
-        <li><a href="#"><i class="icon-comment-discussion position-left"></i> Support</a></li>
+        <li><a href="#"><i class="icon-comment-discussion position-left"></i> תמיכה</a></li>
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="icon-gear position-left"></i>
-                Settings
+                הגדרות
                 <span class="caret"></span>
             </a>
 
             <ul class="dropdown-menu dropdown-menu-right">
-                <li><a href="#"><i class="icon-user-lock"></i> Account security</a></li>
-                <li><a href="#"><i class="icon-statistics"></i> Analytics</a></li>
-                <li><a href="#"><i class="icon-accessibility"></i> Accessibility</a></li>
+                <li><a href="#"><i class="icon-user-lock"></i> אבטחת משתמש</a></li>
+                <li><a href="#"><i class="icon-statistics"></i> אנליזות</a></li>
+                <li><a href="#"><i class="icon-accessibility"></i> נגישות</a></li>
                 <li class="divider"></li>
-                <li><a href="#"><i class="icon-gear"></i> All settings</a></li>
+                <li><a href="#"><i class="icon-gear"></i> הגדרות</a></li>
             </ul>
         </li>
     </ul>
@@ -72,14 +72,14 @@
                 <div class="panel-body bg-indigo-400 border-radius-top text-center" style="background-image: url(http://demo.interface.club/limitless/assets/images/bg.png); background-size: contain;">
                     <div class="content-group-sm">
                         <h6 class="text-semibold no-margin-bottom">
-                            Victoria Davidson
+                            {{ Auth::user()->name }}
                         </h6>
 
                         <span class="display-block">Head of UX</span>
                     </div>
 
                     <a href="#" class="display-inline-block content-group-sm">
-                        <img src="assets/images/demo/users/face11.jpg" class="img-circle img-responsive" alt="" style="width: 110px; height: 110px;">
+                        <img src="{{ asset('images/avatar-placeholder.png')}}" class="img-circle img-responsive" alt="" style="width: 110px; height: 110px;">
                     </a>
 
                     <ul class="list-inline list-inline-condensed no-margin-bottom">
@@ -91,13 +91,17 @@
 
                 <div class="panel no-border-top no-border-radius-top">
                     <ul class="navigation">
-                        <li class="navigation-header">Navigation</li>
-                        <li class="active"><a href="#profile" data-toggle="tab"><i class="icon-files-empty"></i> Profile</a></li>
-                        <li><a href="#schedule" data-toggle="tab"><i class="icon-files-empty"></i> Schedule</a></li>
-                        <li><a href="#messages" data-toggle="tab"><i class="icon-files-empty"></i> Inbox <span class="badge bg-warning-400">23</span></a></li>
-                        <li><a href="#orders" data-toggle="tab"><i class="icon-files-empty"></i> Orders</a></li>
+                        <li class="navigation-header">ניווט</li>
+                        <li class="active"><a href="#profile" data-toggle="tab"><i class="icon-files-empty"></i> הגדרות משתמש</a></li>
+                        <li><a href="#schedule" data-toggle="tab"><i class="icon-files-empty"></i> לו"ז</a></li>
+                        <li><a href="#messages" data-toggle="tab"><i class="icon-files-empty"></i> תיבת דואר <span class="badge bg-warning-400">23</span></a></li>
+                        <li><a href="#orders" data-toggle="tab"><i class="icon-files-empty"></i> הזמנות</a></li>
                         <li class="navigation-divider"></li>
-                        <li><a href="login_advanced.html"><i class="icon-switch2"></i> Log out</a></li>
+                        <li><a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();"><i class="icon-switch2"></i> התנתק</a></li>
+						<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+							{{ csrf_field() }}
+						</form>
                     </ul>
                 </div>
             </div>
@@ -258,71 +262,10 @@
         <!-- Tab content -->
         <div class="tab-content">
             <div class="tab-pane fade in active" id="profile">
-
-                <!-- Daily stats -->
+                <!-- Account settings -->
                 <div class="panel panel-flat">
                     <div class="panel-heading">
-                        <h6 class="panel-title">Daily statistics</h6>
-                        <div class="heading-elements">
-                            <span class="heading-text"><i class="icon-history position-left text-success"></i> Updated 3 hours ago</span>
-
-                            <ul class="icons-list">
-                                <li><a data-action="reload"></a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="panel-body">
-                        <div class="chart-container">
-                            <div class="chart has-fixed-height" id="sales"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /daily stats -->
-
-
-                <!-- Share your thoughts -->
-                <div class="panel panel-flat">
-                    <div class="panel-heading">
-                        <h6 class="panel-title">Share your thoughts</h6>
-                        <div class="heading-elements">
-                            <ul class="icons-list">
-                                <li><a data-action="collapse"></a></li>
-                                <li><a data-action="reload"></a></li>
-                                <li><a data-action="close"></a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="panel-body">
-                        <form action="#">
-                            <div class="form-group">
-                                <textarea name="enter-message" class="form-control mb-15" rows="3" cols="1" placeholder="What's on your mind?"></textarea>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <ul class="icons-list icons-list-extended mt-10">
-                                        <li><a href="#" data-popup="tooltip" title="Add photo" data-container="body"><i class="icon-images2"></i></a></li>
-                                        <li><a href="#" data-popup="tooltip" title="Add video" data-container="body"><i class="icon-film2"></i></a></li>
-                                        <li><a href="#" data-popup="tooltip" title="Add event" data-container="body"><i class="icon-calendar2"></i></a></li>
-                                    </ul>
-                                </div>
-
-                                <div class="col-xs-6 text-right">
-                                    <button type="button" class="btn btn-primary btn-labeled btn-labeled-right">Share <b><i class="icon-circle-left2"></i></b></button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <!-- /share your thoughts -->
-
-
-                <!-- Profile info -->
-                <div class="panel panel-flat">
-                    <div class="panel-heading">
-                        <h6 class="panel-title">Profile information</h6>
+                        <h6 class="panel-title">הגדרות משתמש</h6>
                         <div class="heading-elements">
                             <ul class="icons-list">
                                 <li><a data-action="collapse"></a></li>
@@ -337,129 +280,38 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Username</label>
-                                        <input type="text" value="Eugene" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Full name</label>
-                                        <input type="text" value="Kopyov" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Address line 1</label>
-                                        <input type="text" value="Ring street 12" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Address line 2</label>
-                                        <input type="text" value="building D, flat #67" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>City</label>
-                                        <input type="text" value="Munich" class="form-control">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>State/Province</label>
-                                        <input type="text" value="Bayern" class="form-control">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>ZIP code</label>
-                                        <input type="text" value="1031" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Email</label>
-                                        <input type="text" readonly="readonly" value="eugene@kopyov.com" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Your country</label>
-                                        <select class="select">
-                                            <option value="germany" selected="selected">Germany</option> 
-                                            <option value="france">France</option> 
-                                            <option value="spain">Spain</option> 
-                                            <option value="netherlands">Netherlands</option> 
-                                            <option value="other">...</option> 
-                                            <option value="uk">United Kingdom</option> 
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Phone #</label>
-                                        <input type="text" value="+99-99-9999-9999" class="form-control">
-                                        <span class="help-block">+99-99-9999-9999</span>
+                                        <label>שם משתמש</label>
+                                        <input type="text" value="{{ Auth::user()->name }}" readonly="readonly" class="form-control">
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label class="display-block">Upload profile image</label>
+                                        <label class="display-block">העלה תמונת פרופיל</label>
                                         <input type="file" class="file-styled">
                                         <span class="help-block">Accepted formats: gif, png, jpg. Max file size 2Mb</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="text-right">
-                                <button type="submit" class="btn btn-primary">Save <i class="icon-arrow-left13 position-right"></i></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <!-- /profile info -->
-
-
-                <!-- Account settings -->
-                <div class="panel panel-flat">
-                    <div class="panel-heading">
-                        <h6 class="panel-title">Account settings</h6>
-                        <div class="heading-elements">
-                            <ul class="icons-list">
-                                <li><a data-action="collapse"></a></li>
-                                <li><a data-action="reload"></a></li>
-                                <li><a data-action="close"></a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="panel-body">
-                        <form action="#">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Username</label>
-                                        <input type="text" value="Kopyov" readonly="readonly" class="form-control">
+                                        <label>אימייל</label>
+                                        <input type="text" readonly="readonly" value="{{ Auth::user()->email }}" class="form-control">
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <label>Current password</label>
-                                        <input type="password" value="password" readonly="readonly" class="form-control">
-                                    </div>
+             
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>New password</label>
+                                        <label>ססמא חדשה</label>
                                         <input type="password" placeholder="Enter new password" class="form-control">
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Repeat password</label>
+                                        <label>חזור על הססמא</label>
                                         <input type="password" placeholder="Repeat new password" class="form-control">
                                     </div>
                                 </div>
@@ -468,65 +320,51 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Profile visibility</label>
+                                        <label>אפשרות</label>
 
                                         <div class="radio">
                                             <label>
                                                 <input type="radio" name="visibility" class="styled" checked="checked">
-                                                Visible to everyone
+                                                תת אפשרות
                                             </label>
                                         </div>
 
                                         <div class="radio">
                                             <label>
-                                                <input type="radio" name="visibility" class="styled">
-                                                Visible to friends only
+                                                <input type="radio" name="visibility" class="styled" checked="checked">
+                                                תת אפשרות
                                             </label>
                                         </div>
 
                                         <div class="radio">
                                             <label>
-                                                <input type="radio" name="visibility" class="styled">
-                                                Visible to my connections only
-                                            </label>
-                                        </div>
-
-                                        <div class="radio">
-                                            <label>
-                                                <input type="radio" name="visibility" class="styled">
-                                                Visible to my colleagues only
+                                                <input type="radio" name="visibility" class="styled" checked="checked">
+                                                תת אפשרות
                                             </label>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Notifications</label>
+                                        <label>אפשרות</label>
 
-                                        <div class="checkbox">
+                                        <div class="radio">
                                             <label>
-                                                <input type="checkbox" class="styled" checked="checked">
-                                                Password expiration notification
+                                                <input type="radio" name="visibility" class="styled" checked="checked">
+                                                תת אפשרות
                                             </label>
                                         </div>
 
-                                        <div class="checkbox">
+                                        <div class="radio">
                                             <label>
-                                                <input type="checkbox" class="styled" checked="checked">
-                                                New message notification
+                                                <input type="radio" name="visibility" class="styled" checked="checked">
+                                                תת אפשרות
                                             </label>
                                         </div>
 
-                                        <div class="checkbox">
+                                        <div class="radio">
                                             <label>
-                                                <input type="checkbox" class="styled" checked="checked">
-                                                New task notification
-                                            </label>
-                                        </div>
-
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" class="styled">
-                                                New contact request notification
+                                                <input type="radio" name="visibility" class="styled" checked="checked">
+                                                תת אפשרות
                                             </label>
                                         </div>
                                     </div>
@@ -534,7 +372,7 @@
                             </div>
 
                             <div class="text-right">
-                                <button type="submit" class="btn btn-primary">Save <i class="icon-arrow-left13 position-right"></i></button>
+                                <button type="submit" class="btn btn-primary">שמור <i class="icon-arrow-left13 position-right"></i></button>
                             </div>
                         </form>
                     </div>
@@ -1987,9 +1825,7 @@
 
 
 <!-- Footer -->
-<div class="footer text-muted">
-    &copy; 2015. <a href="#">Limitless Web App Kit</a> by <a href="http://themeforest.net/user/Kopyov" target="_blank">Eugene Kopyov</a>
-</div>
+@yield('footer')
 <!-- /footer -->
 
 </div>

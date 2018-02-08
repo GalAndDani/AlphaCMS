@@ -21,7 +21,7 @@
     
 </head>
 
-<body>
+<body class="has-detached-left">
     <!-- Main navbar -->
 	<div class="navbar navbar-inverse">
 		<div class="navbar-header">
