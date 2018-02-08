@@ -3130,7 +3130,7 @@ li+.dropdown-header.highlight {
         background-color: #fafafa
     }
     .nav-tabs>li.pull-right {
-        float: none!important
+        float: none !important
     }
     .nav-tabs.nav-tabs-solid>li.active>a:after,
     .nav-tabs[class*=bg-]>li.active>a:after {
@@ -3810,8 +3810,8 @@ li+.dropdown-header.highlight {
 .navbar-nav>li>a>.badge,
 .navbar-nav>li>a>.label {
     position: absolute;
-    top: 0;
-    left: 0
+    top: 4px;
+    left: 4px;
 }
 
 .navbar-nav>li>a>.status-mark {
@@ -4410,7 +4410,7 @@ li+.dropdown-header.highlight {
 }
 
 .dropdown-content-heading+.dropdown-header {
-    padding-top: 0!important
+    padding-top: 0 !important
 }
 
 ul.dropdown-menu .dropdown-content-heading {
@@ -4934,7 +4934,7 @@ ul.dropdown-menu .dropdown-content-heading:first-child {
         position: static
     }
     .navbar .select2-container {
-        width: 100%!important
+        width: 100% !important
     }
     .navbar-fixed-bottom .btn-group .dropdown-menu,
     .navbar-fixed-bottom .dropdown .dropdown-menu,
@@ -5734,7 +5734,8 @@ ul.dropdown-menu .dropdown-content-heading:first-child {
 }
 
 .badge {
-    padding: 2px 6px 1px 6px;
+    /* padding: 2px 6px 1px 6px; */
+    padding: 0px 4px;
     font-size: 10px;
     letter-spacing: .1px;
     vertical-align: baseline;
@@ -6161,7 +6162,7 @@ a.thumbnail:hover {
 }
 
 .alert.alert-styled-left[class*=bg-] {
-    border-right-color: rgba(0, 0, 0, .15)!important
+    border-right-color: rgba(0, 0, 0, .15) !important
 }
 
 .alert.alert-styled-right {
@@ -6169,7 +6170,7 @@ a.thumbnail:hover {
 }
 
 .alert.alert-styled-right[class*=bg-] {
-    border-left-color: rgba(0, 0, 0, .15)!important
+    border-left-color: rgba(0, 0, 0, .15) !important
 }
 
 .alert:not(.ui-pnotify)[class*=alert-arrow-]:before,
@@ -6724,7 +6725,7 @@ a.list-group-item-danger:hover {
 }
 
 .panel.has-bg-image {
-    background-image: url(./images/backgrounds/panel_bg.png)
+    background-image: url(/images/backgrounds/panel_bg.png)
 }
 
 .panel-flat>.panel-heading+.table,
@@ -7147,7 +7148,7 @@ h6.panel-title {
 }
 
 .modal-body .close {
-    margin-top: 0!important
+    margin-top: 0 !important
 }
 
 .modal-footer {

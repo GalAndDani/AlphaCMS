@@ -98,8 +98,8 @@
                         <li><a href="#orders" data-toggle="tab"><i class="icon-files-empty"></i> הזמנות</a></li>
                         <li class="navigation-divider"></li>
                         <li><a href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();"><i class="icon-switch2"></i> התנתק</a></li>
-						<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                     document.getElementById('logout-form-app').submit();"><i class="icon-switch2"></i> התנתק</a></li>
+						<form id="logout-form-app" action="{{ route('logout') }}" method="POST" style="display: none;">
 							{{ csrf_field() }}
 						</form>
                     </ul>

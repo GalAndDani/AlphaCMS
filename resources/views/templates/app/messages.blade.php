@@ -1,13 +1,13 @@
 @section('messages')
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-    <i class="icon-bubbles4"></i>
-    <span class="visible-xs-inline-block position-right">Messages</span>
+    <i class="icon-bell2"></i>
+    <span class="visible-xs-inline-block position-right">עדכונים</span>
     <span class="badge bg-warning-400">0</span>
 </a>
 
 <div class="dropdown-menu dropdown-content width-350">
     <div class="dropdown-content-heading">
-        Messages
+    עדכונים
         <ul class="icons-list">
             <li><a href="#"><i class="icon-compose"></i></a></li>
         </ul>
@@ -84,7 +84,7 @@
     </ul>
 
     <div class="dropdown-content-footer">
-        <a href="#" data-popup="tooltip" title="All messages"><i class="icon-menu display-block"></i></a>
+        <a href="#" data-popup="tooltip" title="כל העדכונים"><i class="icon-menu display-block"></i></a>
     </div>
 </div>
 @endsection
