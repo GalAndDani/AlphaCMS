@@ -45,6 +45,10 @@
                             <li><a href="#">אפשרות 3</a></li>
                         </ul>
                     </li>
+                    <li class="navigation-header"><span>ניוזלטר</span> <i class="icon-menu" title="Main pages"></i></li>
+                    <li><a href="{{ route('home') }}"><i class="icon-envelop"></i> <span>תבניות מייל</span></a></li>
+                    <li class="navigation-header"><span>SEO - קידום אתר</span> <i class="icon-menu" title="Main pages"></i></li>
+                    <li><a href="{{ route('home') }}"><i class="icon-embed"></i> <span>תגיות מטה</span></a></li>
                 </ul>
             </div>
         </div>
