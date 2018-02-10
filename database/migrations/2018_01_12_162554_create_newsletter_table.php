@@ -16,12 +16,12 @@ class CreateNewsletterTable extends Migration
         Schema::create('newsletter', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->integer('subscriber_id')->unsigned();
+            $table->integer('lead_id')->unsigned();
             $table->integer('mail_id')->unsigned();
             $table->string('token');
             $table->boolean('opened')->default(0);
 
-            $table->foreign('subscriber_id')->references('id')->on('subscribers')->onDelete('cascade');
+            $table->foreign('lead_id')->references('id')->on('leads')->onDelete('cascade');
             $table->foreign('mail_id')->references('id')->on('mail')->onDelete('cascade');
         });
     }

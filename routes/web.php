@@ -28,3 +28,55 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/profile', 'Profile\ProfileController@index')->name('profile');
+
+
+/*
+|--------------------------------------------------------------------------
+| E-COMMERCE
+|--------------------------------------------------------------------------
+*/
+
+if(env('APP_WEBTYPE') == 'ECOMMERCE'){
+    Route::group(['prefix' => '/ecommerce'], function () {
+    
+        //Proccesors
+        Route::get('/proccesors', 'Ecommerce\ProccesorsController@index')->name('ecommerce.proccesors.index');
+        
+        //Orders
+        Route::get('/orders', 'Ecommerce\OrdersController@index')->name('marketing.orders.index');
+        
+        //Products
+        Route::get('/products', 'Ecommerce\ProductsController@index')->name('marketing.products.index');
+    });
+}
+
+/*
+|--------------------------------------------------------------------------
+| Marketing
+|--------------------------------------------------------------------------
+*/
+
+Route::group(['prefix' => '/marketing'], function () {
+
+    //Newsletter
+    Route::get('/newsletter', 'Marketing\NewsletterController@index')->name('marketing.newsletter.index');
+    
+    //Leads
+    Route::get('/leads', 'Marketing\LeadsController@index')->name('marketing.leads.index');
+    
+    //Pixels
+    Route::get('/pixels', 'Marketing\PixelsController@index')->name('marketing.pixels.index');
+});
+
+/*
+|--------------------------------------------------------------------------
+| General Settings
+|--------------------------------------------------------------------------
+*/
+
+Route::group(['prefix' => '/settings'], function () {
+
+    //Users
+    Route::get('/users', 'Settings\UsersController@index')->name('settings.users.index');
+    
+});
