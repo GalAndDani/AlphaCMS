@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePostsTable extends Migration
+class CreateTrackingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreatePostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('tracking', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('title');
-            $table->text('content');
-            $table->string('tags');
-            $table->boolean('active')->default(1);
+            $table->integer('views');
+            $table->integer('likes');
+            $table->integer('shares');
+            $table->integer('trackingtable_id');
+            $table->string('trackingtable_type');
         });
     }
 
@@ -30,6 +31,6 @@ class CreatePostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blog');
+        Schema::dropIfExists('tracking');
     }
 }

@@ -63,6 +63,7 @@ Route::group(['prefix' => '/marketing'], function () {
     
     //Leads
     Route::get('/leads', 'Marketing\LeadsController@index')->name('marketing.leads.index');
+    Route::get('/leads/list', 'Marketing\LeadsController@getLeads')->name('marketing.leads.list');
     
     //Pixels
     Route::get('/pixels', 'Marketing\PixelsController@index')->name('marketing.pixels.index');

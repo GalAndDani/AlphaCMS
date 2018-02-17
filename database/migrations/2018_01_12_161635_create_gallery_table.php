@@ -18,6 +18,7 @@ class CreateGalleryTable extends Migration
             $table->timestamps();
             $table->string('title');
             $table->string('url');
+            $table->text('description');
             $table->boolean('active')->default(1);
         });
     }

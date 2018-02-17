@@ -18,6 +18,19 @@
 	<link href="{{ asset('css/theme/components.css') }}" rel="stylesheet" type="text/css">
 	<link href="{{ asset('css/theme/colors.css') }}" rel="stylesheet" type="text/css">
 	<!-- /global stylesheets -->
+
+	<script>
+        window.config = {!! json_encode([
+            'csrf' => csrf_token(),
+            'base_url' => asset(''),
+            'host_name' => Request::server('HTTP_HOST'),
+            'user' => [
+                'name' => Auth::user()->name,
+                'id' => Auth::user()->id,
+            ],
+            'timezone' => config('app.timezone'),
+        ]) !!};
+    </script>
     
 </head>
 

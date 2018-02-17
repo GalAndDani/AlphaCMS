@@ -108,7 +108,7 @@
                     <li>
                         <a href="#"><i class="icon-users2"></i> <span>ניהול לידים</span></a>
                         <ul>
-                            <li><a href="#">רשימת לידים</a></li>
+                            <li><a href="{{ route('marketing.leads.index') }}">רשימת לידים</a></li>
                         </ul>
                     </li>
                     <li>
