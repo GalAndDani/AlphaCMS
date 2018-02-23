@@ -4,7 +4,7 @@ namespace App\Http\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SEO extends Model
+class PageContent extends Model
 {
     //
 }

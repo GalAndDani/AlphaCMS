@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMailTable extends Migration
+class CreateActivitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class CreateMailTable extends Migration
      */
     public function up()
     {
-        Schema::create('mail', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id')->unsigned()->index();
+            $table->string('ip');
+            $table->integer('activitytable_id');
+            $table->string('activitytable_type');
             $table->timestamps();
-            $table->string('title');
-            $table->text('content');
-            $table->boolean('active')->default(1);
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -29,6 +32,6 @@ class CreateMailTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mail');
+        Schema::dropIfExists('activities');
     }
 }
