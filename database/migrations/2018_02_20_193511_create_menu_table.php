@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTrackingTable extends Migration
+class CreateMenuTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,9 @@ class CreateTrackingTable extends Migration
      */
     public function up()
     {
-        Schema::create('tracking', function (Blueprint $table) {
+        Schema::create('menu', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->integer('views');
-            $table->integer('likes');
-            $table->integer('shares');
-            $table->integer('trackingtable_id');
-            $table->string('trackingtable_type');
         });
     }
 
@@ -31,6 +26,6 @@ class CreateTrackingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tracking');
+        Schema::dropIfExists('menu');
     }
 }
