@@ -9,21 +9,23 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    protected $fillable = ['name', 'email', 'password'];
+        
+    protected $hidden = ['password', 'remember_token'];
+        
+    public function activity($name, $value = NULL, $success = true){
+        $activity           = new Activity;
+        $activity->user_id  = $this->id;
+        $activity->name     = $name;
+        $activity->value    = $value;
+        $activity->success  = $success;
+        $activity->ip       = \Request::ip();
+        $activity->activitytable()->associate($this);
+        $activity->save();
+    }
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    public function activities()
+    {
+        return $this->morphMany(Activity::class,'activitytable');
+    }
 }
